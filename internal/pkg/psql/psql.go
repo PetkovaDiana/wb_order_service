@@ -2,26 +2,25 @@ package psql
 
 import (
 	"fmt"
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 )
 
 const (
-	usersTable            = "users"
-	allInfoByServiceTable = "all_Info_By_Service"
+	orderTable = "order_items"
 )
 
 type Config struct {
-	Host     string
-	Port     string
-	User     string
-	DBName   string
-	Password string
-	SSLMode  string
+	Host    string `yaml:"host"`
+	Port    string `yaml:"port"`
+	User    string `yaml:"user"`
+	DBName  string `yaml:"dbname"`
+	SSLMode string `yaml:"sslmode"`
 }
 
-func NewDB(cfg Config) (*sqlx.DB, error) {
-	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
-		cfg.Host, cfg.Port, cfg.User, cfg.DBName, cfg.Password, cfg.SSLMode))
+func NewDB(cfg *Config) (*sqlx.DB, error) {
+	db, err := sqlx.Open("pgx", fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s",
+		cfg.Host, cfg.Port, cfg.User, cfg.DBName, cfg.SSLMode))
 	if err != nil {
 		return nil, err
 	}

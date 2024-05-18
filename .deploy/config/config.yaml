@@ -1,0 +1,19 @@
+db:
+  host: "localhost"
+  port: "6532"
+  user: "diana"
+  dbname: "wb"
+  sslmode: "disable"
+
+cache:
+  host: "localhost"
+  port: "11211"
+  order_expiration_time: 100 #second
+
+
+server:
+  port: "8080"
+  read_timeout: 2000 # millisecond
+  write_timeout: 2000 # millisecond
+
+

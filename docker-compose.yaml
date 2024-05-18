@@ -13,19 +13,23 @@ services:
       - "--js"
       - "--sd=/data"
   postgres:
-    container_name: orders_db
     image: postgres:14
     volumes:
       - db-data:/var/lib/postgresql/data
     restart: always
     environment:
-      - "PGDEBUG=true"
-      - "POSTGRES_USER=diana"
-      - "POSTGRES_DB=wb"
-      - "PGSSLMODE=disable"
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - PGDEBUG=true
+      - POSTGRES_USER=diana
+      - POSTGRES_DB=wb
+      - PGSSLMODE=disable
+      - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - "6532:5432"
+  memcached:
+    image: sameersbn/memcached:1.5.6-2
+    ports:
+      - "11211:11211"
+    restart: always
 
 volumes:
   nats:
