@@ -4,6 +4,7 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 	"github.com/joho/godotenv"
 	"os"
+	"projectOrder/internal/pkg/broker"
 	"projectOrder/internal/pkg/cache"
 	"projectOrder/internal/pkg/psql"
 	"projectOrder/internal/server"
@@ -17,6 +18,7 @@ type App struct {
 	DBConfig     *psql.Config   `yaml:"db"`
 	CacheConfig  *cache.Config  `yaml:"cache"`
 	ServerConfig *server.Config `yaml:"server"`
+	BrokerConfig *broker.Config `yaml:"broker"`
 }
 
 func NewAppConfig() (*App, error) {

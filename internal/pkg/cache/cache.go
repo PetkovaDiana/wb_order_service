@@ -15,17 +15,17 @@ type Config struct {
 	Host                string `yaml:"host"`
 	Port                string `yaml:"port"`
 	OrderExpirationTime int    `yaml:"order_expiration_time"`
-}
+} // из конфига
 
 type Cache interface {
 	Set(item *CacheItem) error
 	Get(key string) (*CacheItem, error)
-}
+} // делаем методы
 
 type memCached struct {
 	client *memcache.Client
-	cfg    *Config
-}
+	cfg    *Config // указатель на config
+} // новая структура
 
 func (m *memCached) Set(item *CacheItem) error {
 	return m.client.Set(&memcache.Item{
@@ -33,7 +33,8 @@ func (m *memCached) Set(item *CacheItem) error {
 		Value:      item.Value,
 		Expiration: item.ExpTime,
 	})
-}
+} // так как Set возвращает ошибку, то можно написать вот так
+// client *memcache.Client
 
 func (m *memCached) Get(key string) (*CacheItem, error) {
 	mItem, err := m.client.Get(key)

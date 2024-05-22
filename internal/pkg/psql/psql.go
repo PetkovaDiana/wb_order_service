@@ -6,10 +6,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-const (
-	orderTable = "order_items"
-)
-
 type Config struct {
 	Host    string `yaml:"host"`
 	Port    string `yaml:"port"`

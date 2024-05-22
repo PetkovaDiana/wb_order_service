@@ -10,10 +10,12 @@ cache:
   port: "11211"
   order_expiration_time: 100 #second
 
-
 server:
   port: "8080"
   read_timeout: 2000 # millisecond
   write_timeout: 2000 # millisecond
 
+broker:
+  host: "localhost"
+  port: "4222"
 

@@ -18,10 +18,10 @@ func (h *Handler) orderByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	order, err := h.services.Order.GetOrderById(orderID)
+	order, err := h.services.GetOrderById(orderID)
 	if err != nil {
 		log.Println(err.Error())
-		http.Error(w, "Order not found", http.StatusInternalServerError)
+		http.Error(w, "Order not found", http.StatusBadRequest)
 		return
 	}
 
@@ -36,5 +36,4 @@ func (h *Handler) orderByID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(resp)
-
 }
