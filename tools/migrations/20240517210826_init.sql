@@ -69,9 +69,10 @@ CREATE TABLE status
 CREATE TABLE customer
 (
     id          SERIAL PRIMARY KEY NOT NULL,
-    NAME        TEXT NOT NULL,
+    name        TEXT NOT NULL,
     phone       TEXT NOT NULL,
-    email       TEXT NOT NULL
+    email       TEXT NOT NULL,
+    external_customer_id TEXT NOT NULL
 );
 
 CREATE TABLE orders
@@ -114,6 +115,25 @@ CREATE TABLE order_items
     CONSTRAINT order_id_fk FOREIGN KEY (order_id) REFERENCES orders(id) ON
         DELETE CASCADE
 );
+
+ALTER TABLE bank ADD CONSTRAINT unique_bank_name UNIQUE (bank_name);
+
+ALTER TABLE currency ADD CONSTRAINT unique_currency_name UNIQUE (currency_name);
+
+ALTER TABLE customer ADD CONSTRAINT unique_external_customer_id UNIQUE (external_customer_id);
+
+ALTER TABLE delivery ADD CONSTRAINT unique_delivery_all UNIQUE (zip, city, address, region, delivery_service_id);
+
+ALTER TABLE delivery_service ADD CONSTRAINT unique_delivery_name UNIQUE (delivery_name);
+
+ALTER TABLE items ADD CONSTRAINT unique_rid UNIQUE (rid);
+
+ALTER TABLE orders ADD CONSTRAINT unique_order_uid UNIQUE (order_uid);
+
+ALTER TABLE payment ADD CONSTRAINT unique_transaction UNIQUE (transaction);
+
+ALTER TABLE status ADD CONSTRAINT unique_status_name UNIQUE (name_status);
+
 -- +goose StatementEnd
 
 -- +goose Down

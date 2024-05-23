@@ -8,7 +8,7 @@ db:
 cache:
   host: "localhost"
   port: "11211"
-  order_expiration_time: 100 #second
+  order_expiration_time: 259200 #second
 
 server:
   port: "8080"
@@ -18,4 +18,7 @@ server:
 broker:
   host: "localhost"
   port: "4222"
+  subject: "mysubject"
+  durable: "mypullconsumer"
+
 

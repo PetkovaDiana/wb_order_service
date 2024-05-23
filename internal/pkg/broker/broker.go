@@ -8,8 +8,10 @@ import (
 )
 
 type Config struct {
-	Host string `yaml:"host"`
-	Port string `yaml:"port"`
+	Host    string `yaml:"host"`
+	Port    string `yaml:"port"`
+	Subject string `yaml:"subject"`
+	Durable string `yaml:"durable"`
 }
 
 type IBroker interface {
@@ -24,7 +26,7 @@ type NATSBroker struct {
 }
 
 func (b *NATSBroker) Subscribe(subject string, handler func(msg *nats.Msg)) (*nats.Subscription, error) {
-	sub, err := b.js.PullSubscribe(subject, "mypullconsumer")
+	sub, err := b.js.PullSubscribe(subject, b.cfg.Durable)
 	if err != nil {
 		return nil, err
 	}
@@ -42,6 +44,7 @@ func (b *NATSBroker) Subscribe(subject string, handler func(msg *nats.Msg)) (*na
 			}
 		}
 	}()
+
 	return sub, nil
 }
 

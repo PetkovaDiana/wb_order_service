@@ -42,6 +42,10 @@ func (o *orderService) GetOrderById(orderID string) (*dto.Order, error) {
 		return nil, err
 	}
 
+	if err = o.saveOrderToCache(infoOrder); err != nil {
+		return nil, err
+	}
+
 	return infoOrder, err
 }
 
@@ -83,4 +87,18 @@ func (o *orderService) ProcessOrders(ctx context.Context, orderChan <-chan *dto.
 			return
 		}
 	}
+}
+
+func (o *orderService) saveOrderToCache(infoOrder *dto.Order) error {
+	cacheValue, err := json.Marshal(infoOrder)
+
+	if err != nil {
+		return err
+	}
+
+	return o.cache.Set(&cache.CacheItem{
+		Key:     *infoOrder.OrderUID,
+		Value:   cacheValue,
+		ExpTime: int32(o.orderExpTime),
+	})
 }

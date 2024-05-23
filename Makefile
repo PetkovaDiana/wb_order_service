@@ -9,8 +9,7 @@ DB_PORT="6532"
 DB_NAME="wb"
 DB_PASSWORD=""
 DB_SSLMODE="disable"
-DB_MIGRATIONS="./tools/migrations"
-
+DB_MIGRATIONS="./tools/migrations"=p;
 MAIN_PATH="./cmd/main.go"
 
 .PHONY: bin-deps

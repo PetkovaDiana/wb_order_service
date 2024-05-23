@@ -178,11 +178,7 @@ func (o *OrderRepo) SaveOrder(ctx context.Context, order *dto.Order) error {
 	}
 
 	defer func() {
-		if p := recover(); p != nil {
-			tx.Rollback()
-			log.Println("Transaction rolled back due to panic:", p)
-			panic(p)
-		} else if err != nil {
+		if err != nil {
 			tx.Rollback()
 			log.Println("Transaction rolled back due to error:", err)
 		} else {
@@ -232,7 +228,8 @@ func (o *OrderRepo) SaveOrder(ctx context.Context, order *dto.Order) error {
 	}
 
 	query = `INSERT INTO delivery (zip, city, address, region, delivery_service_id) 
-				VALUES ($1, $2, $3, $4, $5) RETURNING id`
+				VALUES ($1, $2, $3, $4, $5)
+				 ON CONFLICT (zip, city, address, region, delivery_service_id) DO UPDATE SET zip = EXCLUDED.zip RETURNING id`
 
 	var deliveryID int
 	if err := tx.GetContext(ctx, &deliveryID, query, order.Delivery.Zip, order.Delivery.City, order.Delivery.Address, order.Delivery.Region, deliveryServiceID); err != nil {
@@ -250,16 +247,18 @@ func (o *OrderRepo) SaveOrder(ctx context.Context, order *dto.Order) error {
 		return err
 	}
 
-	var chrtID *int
-	var status *int
-	var totalPrice *int
-	var price *int
+	var (
+		chrtID     *int
+		status     *int
+		totalPrice *int
+		price      *int
+	)
+
 	if len(order.Items) > 0 {
 		chrtID = order.Items[0].ChrtID
 		status = order.Items[0].Status
 		price = order.Items[0].Price
 		totalPrice = order.Items[0].TotalPrice
-
 	}
 
 	query = `INSERT INTO status (name_status) 
@@ -282,7 +281,6 @@ func (o *OrderRepo) SaveOrder(ctx context.Context, order *dto.Order) error {
 	}
 
 	for i := range order.Items {
-
 		query = `INSERT INTO items (price, rid, name, size, nm_id, brand) 
 					VALUES ($1, $2, $3, $4, $5, $6)
 					ON CONFLICT (rid) DO UPDATE SET rid  = EXCLUDED.rid RETURNING id`
@@ -300,5 +298,6 @@ func (o *OrderRepo) SaveOrder(ctx context.Context, order *dto.Order) error {
 			return err
 		}
 	}
+
 	return nil
 }

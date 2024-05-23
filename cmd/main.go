@@ -42,7 +42,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	go domain.Order.StartConsumer(ctx, "mysubject")
+	go domain.Order.StartConsumer(ctx, cfg.BrokerConfig.Subject)
 
 	if err = srv.Run(routes.InitRoutes()); err != nil {
 		panic(err)
